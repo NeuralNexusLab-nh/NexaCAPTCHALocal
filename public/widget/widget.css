@@ -1,0 +1,221 @@
+:root {
+  color-scheme: dark;
+  font-family: Oxanium, Inter, ui-sans-serif, system-ui, sans-serif;
+  color: #e9f4ff;
+  background: transparent;
+}
+
+* { box-sizing: border-box; }
+
+html, body { margin: 0; min-width: 260px; background: transparent; }
+
+body { padding: 6px; }
+
+.captcha-shell {
+  width: 100%;
+  max-width: 560px;
+  margin: 0 auto;
+  padding: clamp(11px, 3.5vw, 16px);
+  overflow: hidden;
+  border: 1px solid #31577f;
+  border-radius: 14px;
+  background: #07101e;
+}
+
+.captcha-brand,
+.captcha-footer,
+.input-row {
+  display: flex;
+  align-items: center;
+}
+
+.captcha-brand {
+  min-height: 30px;
+  font-weight: 700;
+  letter-spacing: -.02em;
+}
+
+.captcha-home { display: inline-flex; align-items: center; gap: 9px; border-radius: 2px; color: inherit; text-decoration: none; }
+.captcha-home:hover { color: #68baff; }
+.captcha-brand img { display: block; filter: drop-shadow(0 0 9px rgba(22, 135, 255, .38)); }
+
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+  padding: 4px 8px;
+  border: 1px solid #31577f;
+  border-radius: 2px;
+  color: #68baff;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.status-pill.is-complete { border-color: #48b978; color: #72dc9b; }
+.status-pill.is-error { border-color: #df5360; color: #ff7b85; }
+
+.verification-stage {
+  position: relative;
+  display: grid;
+  min-height: 100px;
+  aspect-ratio: 320 / 116;
+  margin: 14px 0;
+  overflow: hidden;
+  place-items: center;
+  border: 1px solid #243e5c;
+  border-radius: 2px;
+  background: #02060d;
+}
+
+.verification-stage::before {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  content: "";
+  pointer-events: none;
+  background: radial-gradient(circle at center, transparent 20%, rgba(0, 0, 0, .38));
+}
+
+#verification-image {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: none;
+  width: 100%;
+  height: 100%;
+  min-height: 100px;
+  object-fit: fill;
+  image-rendering: auto;
+}
+
+#verification-image.is-visible { display: block; }
+
+.stage-placeholder {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: #68baff;
+  font-size: 13px;
+}
+
+.stage-placeholder[hidden] { display: none !important; }
+
+label {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-bottom: 8px;
+  color: #bdd7f2;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.input-row { gap: 9px; }
+
+input {
+  width: 100%;
+  min-width: 0;
+  height: 42px;
+  padding: 0 13px;
+  border: 1px solid #31577f;
+  border-radius: 2px;
+  outline: none;
+  background: #050d18;
+  color: #e9f4ff;
+  font: inherit;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  transition: border-color 150ms ease, background-color 150ms ease;
+}
+
+input:focus { border-color: #1687ff; background: #071426; box-shadow: 0 0 0 2px rgba(22, 135, 255, .12); }
+input:disabled { cursor: not-allowed; opacity: .58; }
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 40px;
+  padding: 0 13px;
+  border: 1px solid #31577f;
+  border-radius: 2px;
+  cursor: pointer;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+  transition: transform 120ms ease, border-color 150ms ease, background-color 150ms ease;
+}
+
+.button:hover:not(:disabled) { transform: translateY(-1px); }
+.button:active:not(:disabled) { transform: translateY(0); }
+.button:focus-visible { outline: 2px solid #1687ff; outline-offset: 2px; }
+.button:disabled { cursor: not-allowed; opacity: .48; }
+.button-primary { border-color: #1687ff; background: #1687ff; color: #f7fbff; }
+.button-quiet { padding: 0 9px; border-color: transparent; background: transparent; color: #89a9ca; }
+.button-quiet:hover:not(:disabled) { border-color: #31577f; color: #e9f4ff; }
+
+.captcha-footer {
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.verification-stage.is-gravity { border-color: #61388e; aspect-ratio: 3 / 1; background: #05030a; }
+.verification-stage.is-gravity::before { background: linear-gradient(90deg, rgba(30, 8, 52, .34), transparent 16% 84%, rgba(30, 8, 52, .34)); }
+
+.theme-gravity { color: #eadbfa; }
+.theme-gravity .captcha-shell { border-color: #7443a4; background: #0b0614; box-shadow: inset 0 0 0 1px rgba(189, 116, 255, .06); }
+.theme-gravity .captcha-home { color: #e1c2fb; }
+.theme-gravity .captcha-home:hover { color: #cf94ff; }
+.theme-gravity .captcha-brand img { filter: hue-rotate(46deg) saturate(1.35) brightness(1.15) drop-shadow(0 0 10px rgba(174, 89, 255, .5)); }
+.theme-gravity .status-pill:not(.is-complete):not(.is-error) { border-color: #61388e; color: #c483ff; }
+.theme-gravity .stage-placeholder, .theme-gravity label { color: #d9b5f7; }
+.theme-gravity label i { color: #b965f0; }
+.theme-gravity input { border-color: #63398a; background: #0a0511; color: #e5c5ff; }
+.theme-gravity input:focus { border-color: #a757ed; background: #12081e; box-shadow: 0 0 0 2px rgba(168, 82, 237, .16); }
+.theme-gravity .button:focus-visible { outline-color: #b56aff; }
+.theme-gravity .button-primary { border-color: #8d42cf; background: #8d42cf; }
+.theme-gravity .button-quiet { color: #b995d4; }
+.theme-gravity .button-quiet:hover:not(:disabled) { border-color: #61388e; color: #f1e1ff; }
+.theme-gravity .captcha-footer p:not(.is-error):not(.is-success) { color: #b99acb; }
+
+.captcha-footer p {
+  min-width: 0;
+  margin: 0;
+  overflow-wrap: anywhere;
+  color: #89a9ca;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.captcha-footer p.is-error { color: #ff7b85; }
+.captcha-footer p.is-success { color: #72dc9b; }
+
+@media (max-width: 430px) {
+  .captcha-shell { border-radius: 12px; }
+  .verification-stage { margin-block: 11px; }
+  .captcha-footer { align-items: flex-start; flex-direction: column; }
+  .captcha-brand { flex-wrap: wrap; gap: 9px; }
+  .button { min-height: 44px; }
+}
+
+@media (max-width: 360px) {
+  .input-row { align-items: stretch; flex-direction: column; }
+  .button-primary { width: 100%; }
+}
+
+@media (pointer: coarse) {
+  .button { min-height: 44px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .button, input { transition: none; }
+  .button:hover:not(:disabled) { transform: none; }
+}

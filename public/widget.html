@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="dark">
+    <title>NexaCAPTCHA verification</title>
+    <link rel="stylesheet" href="/widget-assets/widget.css?v=16">
+  </head>
+  <body>
+    <main class="captcha-shell" aria-labelledby="captcha-title">
+      <header class="captcha-brand">
+        <span class="captcha-home" id="captcha-title">NexaCAPTCHA Gravity</span>
+        <span class="status-pill" id="status-pill">Starting</span>
+      </header>
+
+      <div class="verification-stage" aria-busy="false" id="verification-stage">
+        <img id="verification-image" alt="Animated verification text" draggable="false">
+        <div class="stage-placeholder" id="stage-placeholder">
+          <i class="fa-solid fa-circle-notch fa-spin" aria-hidden="true"></i>
+          Preparing verification…
+        </div>
+      </div>
+
+      <form id="captcha-form" novalidate>
+        <label for="captcha-answer">
+          <i class="fa-solid fa-keyboard" aria-hidden="true"></i>
+          Enter the characters you see
+        </label>
+        <div class="input-row">
+          <input
+            id="captcha-answer"
+            name="answer"
+            type="text"
+            inputmode="text"
+            minlength="4"
+            maxlength="4"
+            autocomplete="off"
+            autocapitalize="characters"
+            autocorrect="off"
+            spellcheck="false"
+            disabled
+            required
+          >
+          <button class="button button-primary" id="verify-button" type="submit" disabled>
+            <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
+            Verify
+          </button>
+        </div>
+      </form>
+
+      <footer class="captcha-footer">
+        <p id="status-message" role="status" aria-live="polite">Preparing a new verification…</p>
+        <button class="button button-quiet" id="new-button" type="button">
+          <i class="fa-solid fa-rotate" aria-hidden="true"></i>
+          New verification
+        </button>
+      </footer>
+    </main>
+    <script src="/widget-assets/widget.js?v=16" defer></script>
+  </body>
+</html>

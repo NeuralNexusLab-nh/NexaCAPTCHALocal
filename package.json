@@ -1,0 +1,31 @@
+{
+  "name": "nexacaptcha-local",
+  "version": "1.0.0",
+  "description": "Self-hosted NexaCAPTCHA Gravity service",
+  "homepage": "https://nexacaptcha.zone.id",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/NeuralNexusLab-nh/NexaCAPTCHALocal.git"
+  },
+  "bugs": {
+    "url": "https://github.com/NeuralNexusLab-nh/NexaCAPTCHALocal/issues"
+  },
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "check": "node --check server.js && node --check lib/config.js && node --check lib/security.js && node --check lib/store.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "license": "Apache-2.0",
+  "dependencies": {
+    "compression": "^1.8.1",
+    "dotenv": "^17.2.1",
+    "express": "^5.1.0",
+    "express-rate-limit": "^8.0.1",
+    "helmet": "^8.1.0",
+    "hershey": "^2.1.7"
+  }
+}
