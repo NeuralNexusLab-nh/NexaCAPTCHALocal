@@ -1,17 +1,17 @@
 # NexaCAPTCHA Local
 
-NexaCAPTCHA Local is the self-hosted edition of **NexaCAPTCHA Gravity**. It provides the same browser loader, completion result, and server-side verification API as the hosted service, while keeping CAPTCHA images, verification records, and tokens on infrastructure you control.
+NexaCAPTCHA Local is the self-hosted edition of **NexaCAPTCHA Gravity and Algebra**. It provides the same browser loaders, completion result, and server-side verification API as the hosted service, while keeping CAPTCHA images, verification records, and tokens on infrastructure you control.
 
 Official website: [https://nexacaptcha.nxlabtw.com](https://nexacaptcha.nxlabtw.com)
 
 ## What you get
 
-- A drop-in browser loader at `/captcha/gravity.js` (with `/captcha.js` as an alias).
-- Four-character Gravity image verification.
+- Drop-in browser loaders at `/captcha/gravity.js` and `/captcha/algebra.js` (with `/captcha.js` as a Gravity alias).
+- Four-character Gravity image verification and two-variable Algebra verification.
 - A one-time media URL, a two-minute verification window, two answer attempts, and a 20-second wait after the first incorrect answer.
 - A 64-character one-time response token that expires after five minutes.
 - File-backed data in `DATA_DIR`; no database is required.
-- A shared pool of 10 images, with one randomly replaced every six seconds.
+- Separate shared pools of 10 Gravity and 10 Algebra images, with one image in each pool randomly replaced every six seconds.
 - No telemetry and no connection to the hosted NexaCAPTCHA service.
 
 ## Requirements
@@ -70,7 +70,9 @@ If a reverse proxy is used, it must replace untrusted `Host` and `X-Forwarded-Pr
 
 ## Frontend integration
 
-Use the official filename in your page and replace the hostname with your own `HOST_ORIGIN`:
+Choose a module, use its official filename, and replace the hostname with your own `HOST_ORIGIN`.
+
+Gravity:
 
 ```html
 <div class="nexa-captcha"
@@ -89,6 +91,16 @@ Use the official filename in your page and replace the hostname with your own `H
 ```
 
 `/captcha.js` is an alias for `/captcha/gravity.js`. The callback name and form-submission code are examples, not fixed requirements.
+
+Algebra uses the same callback and backend verification flow. Change the module name in both places:
+
+```html
+<div class="nexa-captcha"
+     data-captcha-type="algebra"
+     data-callback="onCaptchaComplete"></div>
+
+<script src="https://captcha.abc.com/captcha/algebra.js" defer></script>
+```
 
 On success, the callback receives:
 
@@ -144,9 +156,11 @@ The paths and JSON formats match the hosted service. Only the hostname changes.
 | Method | Endpoint | Used by |
 | --- | --- | --- |
 | `GET` | `/captcha/gravity.js` | Your page |
+| `GET` | `/captcha/algebra.js` | Your page |
 | `GET` | `/captcha.js` | Gravity alias |
 | `GET` | `/widget` | Browser loader |
 | `POST` | `/api/verifications` | Widget |
+| `POST` | `/api/algebra/verifications` | Algebra widget |
 | `GET` | `/api/media/:mediaTicket` | Widget; one-time image delivery |
 | `GET` | `/api/verifications/:verificationId/status` | Widget |
 | `POST` | `/api/verifications/:verificationId/answer` | Widget |
@@ -160,7 +174,8 @@ Unknown `/api/*` paths return JSON with HTTP 404. Other unknown paths return a s
 
 ```text
 data/
-├── images/          # Shared pre-generated PNG files
+├── images/          # Shared pre-generated Gravity PNG files
+│   └── algebra/     # Shared pre-generated Algebra PNG files
 ├── verification/    # Active verification JSON records
 └── tokens/          # One-time response-token JSON records
 ```
