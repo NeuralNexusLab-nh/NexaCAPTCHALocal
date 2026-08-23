@@ -2,7 +2,7 @@
 
 NexaCAPTCHA Local is the self-hosted edition of **NexaCAPTCHA Gravity**. It provides the same browser loader, completion result, and server-side verification API as the hosted service, while keeping CAPTCHA images, verification records, and tokens on infrastructure you control.
 
-Official website: [https://nexacaptcha.zone.id](https://nexacaptcha.zone.id)
+Official website: [https://nexacaptcha.nxlabtw.com](https://nexacaptcha.nxlabtw.com)
 
 ## What you get
 
