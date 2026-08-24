@@ -1,7 +1,7 @@
 {
   "name": "nexacaptcha-local",
   "version": "1.0.0",
-  "description": "Self-hosted NexaCAPTCHA Gravity and Algebra service",
+  "description": "Self-hosted NexaCAPTCHA Gravity service",
   "homepage": "https://nexacaptcha.nxlabtw.com",
   "repository": {
     "type": "git",

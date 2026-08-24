@@ -5,19 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="color-scheme" content="dark">
     <title>NexaCAPTCHA verification</title>
-    <link rel="icon" href="/favicon-blue.svg" type="image/svg+xml">
-    <link rel="stylesheet" href="/vendor/fonts/inter/index.css">
-    <link rel="stylesheet" href="/vendor/fonts/oxanium/index.css">
-    <link rel="stylesheet" href="/vendor/fontawesome/css/all.min.css">
-    <link rel="stylesheet" href="/widget-assets/widget.css?v=19">
+    <link rel="stylesheet" href="/widget-assets/widget.css?v=16">
   </head>
   <body>
     <main class="captcha-shell" aria-labelledby="captcha-title">
       <header class="captcha-brand">
-        <a class="captcha-home" href="https://nexacaptcha.nxlabtw.com/" target="_blank" rel="noopener noreferrer">
-          <img src="/assets/logo.svg?v=2" alt="" width="26" height="26">
-          <span id="captcha-title">NexaCAPTCHA</span>
-        </a>
+        <span class="captcha-home" id="captcha-title">NexaCAPTCHA Gravity</span>
         <span class="status-pill" id="status-pill">Starting</span>
       </header>
 
@@ -30,9 +23,9 @@
       </div>
 
       <form id="captcha-form" novalidate>
-        <label id="answer-label" for="captcha-answer">
+        <label for="captcha-answer">
           <i class="fa-solid fa-keyboard" aria-hidden="true"></i>
-          <span id="answer-label-text">Enter the characters you see</span>
+          Enter the characters you see
         </label>
         <div class="input-row">
           <input
@@ -49,16 +42,6 @@
             disabled
             required
           >
-          <div class="algebra-inputs" id="algebra-inputs" hidden>
-            <label class="coordinate-field" for="captcha-answer-x">
-              <span>x =</span>
-              <input id="captcha-answer-x" name="x" type="number" inputmode="numeric" min="-50" max="50" step="1" autocomplete="off" disabled required>
-            </label>
-            <label class="coordinate-field" for="captcha-answer-y">
-              <span>y =</span>
-              <input id="captcha-answer-y" name="y" type="number" inputmode="numeric" min="-50" max="50" step="1" autocomplete="off" disabled required>
-            </label>
-          </div>
           <button class="button button-primary" id="verify-button" type="submit" disabled>
             <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
             Verify
@@ -74,6 +57,6 @@
         </button>
       </footer>
     </main>
-    <script src="/widget-assets/widget.js?v=18" defer></script>
+    <script src="/widget-assets/widget.js?v=16" defer></script>
   </body>
 </html>

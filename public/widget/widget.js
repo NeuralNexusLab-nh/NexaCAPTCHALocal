@@ -3,8 +3,7 @@
 
   var parameters = new URLSearchParams(window.location.search);
   var widgetId = parameters.get("widgetId") || "standalone";
-  var requestedCaptchaType = parameters.get("captchaType");
-  var captchaType = requestedCaptchaType === "algebra" ? "algebra" : "gravity";
+  var captchaType = "gravity";
   var requestedParentOrigin = parameters.get("parentOrigin");
   var parentOrigin = null;
   try {
@@ -18,11 +17,6 @@
 
   var form = document.getElementById("captcha-form");
   var input = document.getElementById("captcha-answer");
-  var inputX = document.getElementById("captcha-answer-x");
-  var inputY = document.getElementById("captcha-answer-y");
-  var algebraInputs = document.getElementById("algebra-inputs");
-  var answerLabel = document.getElementById("answer-label");
-  var answerLabelText = document.getElementById("answer-label-text");
   var verifyButton = document.getElementById("verify-button");
   var newButton = document.getElementById("new-button");
   var image = document.getElementById("verification-image");
@@ -38,20 +32,10 @@
   var coolingDown = false;
   var completed = false;
 
-  document.body.classList.toggle("theme-gravity", captchaType === "gravity" || captchaType === "algebra");
-  document.body.classList.toggle("theme-algebra", captchaType === "algebra");
+  document.body.classList.toggle("theme-gravity", captchaType === "gravity");
   stage.classList.toggle("is-gravity", captchaType === "gravity");
-  stage.classList.toggle("is-algebra", captchaType === "algebra");
-  title.textContent = captchaType === "algebra" ? "NexaCAPTCHA Algebra" : "NexaCAPTCHA Gravity";
-  image.alt = captchaType === "algebra"
-    ? "Distorted system of equations"
-    : "Distorted verification text";
-  algebraInputs.hidden = captchaType !== "algebra";
-  input.hidden = captchaType === "algebra";
-  answerLabel.htmlFor = captchaType === "algebra" ? "captcha-answer-x" : "captcha-answer";
-  answerLabelText.textContent = captchaType === "algebra"
-    ? "Solve the system and enter both integer values"
-    : "Enter the characters you see";
+  title.textContent = "NexaCAPTCHA Gravity";
+  image.alt = "Distorted verification text";
 
   function send(type, payload) {
     if (!parentOrigin || window.parent === window) return;
@@ -86,9 +70,7 @@
     stage.setAttribute("aria-busy", String(busy));
     var inactive = busy || completed || !currentVerificationId;
     verifyButton.disabled = inactive || coolingDown;
-    input.disabled = inactive || captchaType === "algebra";
-    inputX.disabled = inactive || captchaType !== "algebra";
-    inputY.disabled = inactive || captchaType !== "algebra";
+    input.disabled = inactive;
     newButton.disabled = busy || coolingDown;
   }
 
@@ -164,8 +146,6 @@
     coolingDown = false;
     currentVerificationId = null;
     input.value = "";
-    inputX.value = "";
-    inputY.value = "";
     busy = true;
     updateControls();
     sendResult({ success: false, verificationId: null, responseToken: null });
@@ -182,13 +162,10 @@
     setMessage("Loading a new verification…", "");
 
     try {
-      var createUrl = captchaType === "algebra"
-        ? "/api/algebra/verifications"
-        : "/api/verifications";
-      var response = await fetch(createUrl, {
+      var response = await fetch("/api/verifications", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(captchaType === "algebra" ? {} : { captchaType: captchaType }),
+        body: JSON.stringify({ captchaType: captchaType }),
         cache: "no-store"
       });
       var result = await response.json();
@@ -201,12 +178,7 @@
         image.classList.add("is-visible");
         busy = false;
         setPill("Playing", "fa-eye", "");
-        setMessage(
-          captchaType === "algebra"
-            ? "Solve both equations. The values of x and y are integers from -50 to 50."
-            : "Read the distorted text, then enter all four characters.",
-          ""
-        );
+        setMessage("Read the distorted text, then enter all four characters.", "");
         updateControls();
         armExpiry(Math.max(1_000, (result.expiresInMs || 120_000) - 1_000));
         void fetch(
@@ -222,7 +194,7 @@
         }).catch(function () {
           // The conservative local timer remains armed when status sync fails.
         });
-        (captchaType === "algebra" ? inputX : input).focus();
+        input.focus();
       };
       image.onerror = function () {
         currentVerificationId = null;
@@ -244,25 +216,12 @@
   async function submitAnswer(event) {
     event.preventDefault();
     if (busy || coolingDown || completed || !currentVerificationId) return;
-    var answer;
-    if (captchaType === "algebra") {
-      var x = inputX.value.trim();
-      var y = inputY.value.trim();
-      if (!/^-?\d+$/.test(x) || !/^-?\d+$/.test(y)
-        || Number(x) < -50 || Number(x) > 50 || Number(y) < -50 || Number(y) > 50) {
-        setMessage("Enter integer values from -50 to 50 for both x and y.", "is-error");
-        inputX.focus();
-        return;
-      }
-      answer = String(Number(x)) + "," + String(Number(y));
-    } else {
-      answer = input.value.trim().toUpperCase();
-      input.value = answer;
-      if (answer.length !== 4) {
-        setMessage("Enter all four characters before verifying.", "is-error");
-        (captchaType === "algebra" ? inputX : input).focus();
-        return;
-      }
+    var answer = input.value.trim().toUpperCase();
+    input.value = answer;
+    if (answer.length !== 4) {
+      setMessage("Enter all four characters before verifying.", "is-error");
+      input.focus();
+      return;
     }
 
     busy = true;
@@ -298,8 +257,6 @@
       }
 
       input.value = "";
-      inputX.value = "";
-      inputY.value = "";
       if (result.status === "verification_failed") {
         clearTimers();
         currentVerificationId = null;

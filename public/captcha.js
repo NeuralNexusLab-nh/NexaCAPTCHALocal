@@ -4,7 +4,7 @@
   var script = document.currentScript;
   if (!script) {
     var candidates = document.querySelectorAll(
-      'script[src*="/captcha.js"], script[src*="/captcha/gravity.js"], script[src*="/captcha/algebra.js"]'
+      'script[src*="/captcha.js"], script[src*="/captcha/gravity.js"]'
     );
     script = candidates[candidates.length - 1];
   }
@@ -12,9 +12,7 @@
 
   var loaderUrl = new URL(script.src, window.location.href);
   var serviceOrigin = loaderUrl.origin;
-  var defaultCaptchaType = loaderUrl.pathname.includes("/captcha/algebra.js")
-    ? "algebra"
-    : "gravity";
+  var defaultCaptchaType = "gravity";
   var instances = new WeakMap();
   var sequence = 0;
 
@@ -30,7 +28,7 @@
 
     options = options || {};
     var captchaType = options.captchaType || mount.dataset.captchaType || defaultCaptchaType;
-    if (captchaType !== "gravity" && captchaType !== "algebra") {
+    if (captchaType !== "gravity") {
       throw new Error("Unsupported NexaCAPTCHA type.");
     }
     sequence += 1;
@@ -40,7 +38,7 @@
     var iframe = document.createElement("iframe");
     iframe.src =
       serviceOrigin +
-      "/widget?v=10&parentOrigin=" +
+      "/widget?v=8&parentOrigin=" +
       encodeURIComponent(window.location.origin) +
       "&widgetId=" +
       encodeURIComponent(widgetId) +

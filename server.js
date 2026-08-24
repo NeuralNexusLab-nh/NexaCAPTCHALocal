@@ -48,14 +48,6 @@ app.post("/api/verifications", async (request, response, next) => {
   } catch (error) { next(error); }
 });
 
-app.post("/api/algebra/verifications", async (request, response, next) => {
-  try {
-    rejectForMemory();
-    if (request.body && Object.keys(request.body).length !== 0) throw new PublicError(400, "invalid-request", "The request body is invalid.");
-    response.status(201).set("Cache-Control", "no-store").json(await store.create("algebra"));
-  } catch (error) { next(error); }
-});
-
 app.get("/api/media/:mediaTicket", async (request, response, next) => {
   try {
     const media = await store.claimMedia(request.params.mediaTicket || "");
@@ -83,7 +75,7 @@ app.post("/api/siteverify", async (request, response, next) => {
   } catch (error) { next(error); }
 });
 
-app.get(["/captcha.js", "/captcha/gravity.js", "/captcha/algebra.js"], widgetHeaders, (_request, response) => {
+app.get(["/captcha.js", "/captcha/gravity.js"], widgetHeaders, (_request, response) => {
   response.set({ "Access-Control-Allow-Origin": "*", "Cache-Control": "public, max-age=300" }).sendFile(path.join(config.publicDirectory, "captcha.js"));
 });
 app.get("/widget", widgetHeaders, (request, response) => {
