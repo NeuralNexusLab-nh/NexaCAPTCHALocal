@@ -10,3 +10,7 @@ James Hurt, Cognition, Inc., 900 Technology Park Drive, Billerica, MA 01821
 NTIS format.
 
 Third-party components retain their own copyright and license notices.
+
+MP3 encoding is provided by the `@breezystack/lamejs` package, distributed
+under the GNU Lesser General Public License v3.0. The package remains a
+separate dependency and retains its own copyright and license terms.

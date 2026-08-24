@@ -5,12 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="color-scheme" content="dark">
     <title>NexaCAPTCHA verification</title>
-    <link rel="stylesheet" href="/widget-assets/widget.css?v=16">
+    <link rel="icon" href="/favicon-blue.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="/vendor/fonts/inter/index.css">
+    <link rel="stylesheet" href="/vendor/fonts/oxanium/index.css">
+    <link rel="stylesheet" href="/vendor/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="/widget-assets/widget.css?v=17">
   </head>
   <body>
     <main class="captcha-shell" aria-labelledby="captcha-title">
       <header class="captcha-brand">
-        <span class="captcha-home" id="captcha-title">NexaCAPTCHA Gravity</span>
+        <a class="captcha-home" href="https://nexacaptcha.nxlabtw.com/" target="_blank" rel="noopener noreferrer">
+          <img src="/assets/logo.svg?v=2" alt="" width="26" height="26">
+          <span id="captcha-title">NexaCAPTCHA</span>
+        </a>
         <span class="status-pill" id="status-pill">Starting</span>
       </header>
 
@@ -51,12 +58,19 @@
 
       <footer class="captcha-footer">
         <p id="status-message" role="status" aria-live="polite">Preparing a new verification…</p>
-        <button class="button button-quiet" id="new-button" type="button">
-          <i class="fa-solid fa-rotate" aria-hidden="true"></i>
-          New verification
-        </button>
+        <div class="footer-actions">
+          <button class="button button-quiet" id="audio-button" type="button" disabled>
+            <i class="fa-solid fa-volume-high" aria-hidden="true"></i>
+            <span>Audio</span>
+          </button>
+          <button class="button button-quiet" id="new-button" type="button">
+            <i class="fa-solid fa-rotate" aria-hidden="true"></i>
+            New verification
+          </button>
+        </div>
+        <span class="sr-only" id="audio-status" role="status" aria-live="polite"></span>
       </footer>
     </main>
-    <script src="/widget-assets/widget.js?v=16" defer></script>
+    <script src="/widget-assets/widget.js?v=17" defer></script>
   </body>
 </html>

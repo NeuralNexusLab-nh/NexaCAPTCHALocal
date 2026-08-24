@@ -19,6 +19,8 @@
   var input = document.getElementById("captcha-answer");
   var verifyButton = document.getElementById("verify-button");
   var newButton = document.getElementById("new-button");
+  var audioButton = document.getElementById("audio-button");
+  var audioStatus = document.getElementById("audio-status");
   var image = document.getElementById("verification-image");
   var placeholder = document.getElementById("stage-placeholder");
   var stage = document.getElementById("verification-stage");
@@ -26,6 +28,10 @@
   var pill = document.getElementById("status-pill");
   var title = document.getElementById("captcha-title");
   var currentVerificationId = null;
+  var currentAudioUrl = null;
+  var audioObjectUrl = null;
+  var audioPlayer = null;
+  var audioLoading = false;
   var expiryTimer = null;
   var cooldownTimer = null;
   var busy = false;
@@ -72,6 +78,29 @@
     verifyButton.disabled = inactive || coolingDown;
     input.disabled = inactive;
     newButton.disabled = busy || coolingDown;
+    audioButton.disabled = busy || completed || !currentVerificationId || !currentAudioUrl || audioLoading;
+  }
+
+  function setAudioButton(label, icon) {
+    audioButton.replaceChildren();
+    var iconElement = document.createElement("i");
+    iconElement.className = "fa-solid " + icon;
+    iconElement.setAttribute("aria-hidden", "true");
+    audioButton.append(iconElement, document.createTextNode(label));
+  }
+
+  function resetAudio() {
+    if (audioPlayer) {
+      audioPlayer.pause();
+      audioPlayer.removeAttribute("src");
+    }
+    if (audioObjectUrl) URL.revokeObjectURL(audioObjectUrl);
+    audioPlayer = null;
+    audioObjectUrl = null;
+    currentAudioUrl = null;
+    audioLoading = false;
+    audioStatus.textContent = "";
+    setAudioButton("Audio", "fa-volume-high");
   }
 
   function clearTimers() {
@@ -145,6 +174,7 @@
     completed = false;
     coolingDown = false;
     currentVerificationId = null;
+    resetAudio();
     input.value = "";
     busy = true;
     updateControls();
@@ -172,6 +202,7 @@
       if (!response.ok) throw new Error(result.errorCode || "verification-create-error");
 
       currentVerificationId = result.verificationId;
+      currentAudioUrl = result.audioUrl || null;
       image.onload = function () {
         var playbackVerificationId = currentVerificationId;
         placeholder.hidden = true;
@@ -211,6 +242,37 @@
       setMessage("Unable to reach NexaCAPTCHA. Try again.", "is-error");
       updateControls();
     }
+  }
+
+
+  async function playAudio() {
+    if (busy || completed || !currentVerificationId || !currentAudioUrl || audioLoading) return;
+    try {
+      if (!audioPlayer) {
+        audioLoading = true;
+        setAudioButton("Loading", "fa-volume-high");
+        updateControls();
+        var response = await fetch(currentAudioUrl, { cache: "no-store" });
+        if (!response.ok) throw new Error("audio-load-error");
+        var blob = await response.blob();
+        audioObjectUrl = URL.createObjectURL(blob);
+        audioPlayer = new Audio(audioObjectUrl);
+        audioPlayer.addEventListener("ended", function () {
+          audioStatus.textContent = "Audio verification finished. Select Audio to replay it.";
+          setAudioButton("Replay", "fa-rotate-right");
+        });
+        audioLoading = false;
+      }
+      audioPlayer.currentTime = 0;
+      await audioPlayer.play();
+      audioStatus.textContent = "Playing the audio verification.";
+      setAudioButton("Playing", "fa-volume-high");
+    } catch (_) {
+      audioLoading = false;
+      audioStatus.textContent = "The audio verification could not be played.";
+      setAudioButton("Audio unavailable", "fa-volume-xmark");
+    }
+    updateControls();
   }
 
   async function submitAnswer(event) {
@@ -290,6 +352,7 @@
   });
   form.addEventListener("submit", submitAnswer);
   newButton.addEventListener("click", scheduleVerification);
+  audioButton.addEventListener("click", function () { void playAudio(); });
   window.addEventListener("message", function (event) {
     if (event.origin !== parentOrigin) return;
     var data = event.data;

@@ -56,6 +56,14 @@ app.get("/api/media/:mediaTicket", async (request, response, next) => {
   } catch (error) { next(error); }
 });
 
+app.get("/api/audio/:audioTicket", async (request, response, next) => {
+  try {
+    const audio = await store.claimAudio(request.params.audioTicket || "");
+    response.set({ "Cache-Control": "no-store, max-age=0", "Content-Type": "audio/mpeg", "Cross-Origin-Resource-Policy": "same-origin" });
+    response.sendFile(audio.audioPath, (error) => { audio.release(); if (error) next(error); });
+  } catch (error) { next(error); }
+});
+
 app.get("/api/verifications/:verificationId/status", async (request, response, next) => {
   try { response.set("Cache-Control", "no-store").json({ expiresAt: await store.getPlaybackExpiry(request.params.verificationId) }); }
   catch (error) { next(error); }

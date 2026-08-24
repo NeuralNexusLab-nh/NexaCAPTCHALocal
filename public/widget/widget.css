@@ -167,6 +167,18 @@ input:disabled { cursor: not-allowed; opacity: .58; }
   margin-top: 10px;
 }
 
+.footer-actions { display: flex; align-items: center; gap: 3px; flex: 0 0 auto; }
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 .verification-stage.is-gravity { border-color: #61388e; aspect-ratio: 3 / 1; background: #05030a; }
 .verification-stage.is-gravity::before { background: linear-gradient(90deg, rgba(30, 8, 52, .34), transparent 16% 84%, rgba(30, 8, 52, .34)); }
 
@@ -202,6 +214,7 @@ input:disabled { cursor: not-allowed; opacity: .58; }
   .captcha-shell { border-radius: 12px; }
   .verification-stage { margin-block: 11px; }
   .captcha-footer { align-items: flex-start; flex-direction: column; }
+  .footer-actions { width: 100%; justify-content: flex-end; }
   .captcha-brand { flex-wrap: wrap; gap: 9px; }
   .button { min-height: 44px; }
 }

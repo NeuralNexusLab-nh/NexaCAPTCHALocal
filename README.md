@@ -1,6 +1,6 @@
 # NexaCAPTCHA Local
 
-NexaCAPTCHA Local is the self-hosted edition of **NexaCAPTCHA Gravity**. It provides the same browser loader, completion result, and server-side verification API as the hosted service, while keeping CAPTCHA images, verification records, and tokens on infrastructure you control.
+NexaCAPTCHA Local is the self-hosted edition of **NexaCAPTCHA Gravity**. It provides the same browser loader, audio alternative, completion result, and server-side verification API as the hosted service, while keeping CAPTCHA media, verification records, and tokens on infrastructure you control.
 
 Official website: [https://nexacaptcha.nxlabtw.com](https://nexacaptcha.nxlabtw.com)
 
@@ -8,10 +8,10 @@ Official website: [https://nexacaptcha.nxlabtw.com](https://nexacaptcha.nxlabtw.
 
 - A drop-in browser loader at `/captcha/gravity.js` (with `/captcha.js` as an alias).
 - Four-character Gravity image verification.
-- A one-time media URL, a two-minute verification window, two answer attempts, and a 20-second wait after the first incorrect answer.
+- One-time image and audio URLs, a two-minute verification window, two answer attempts, and a 20-second wait after the first incorrect answer.
 - A 64-character one-time response token that expires after five minutes.
 - File-backed data in `DATA_DIR`; no database is required.
-- A shared pool of 10 images, with one randomly replaced every six seconds.
+- A shared pool of 10 image-and-audio pairs, with one pair randomly replaced every six seconds.
 - No telemetry and no connection to the hosted NexaCAPTCHA service.
 
 ## Requirements
@@ -45,14 +45,14 @@ DATA_DIR=./data
 SITE_ORIGIN=https://abc.com,https://abc.com.tw
 HOST_ORIGIN=https://abcnexacaptcha.com,https://abcnexacaptcha.com.tw
 CPU_RESOURCE_LIMIT=250m
-RAM_RESOURCE_LIMIT_MB=100
+RAM_RESOURCE_LIMIT_MB=300
 STORAGE_RESOURCE_LIMIT_GB=10
 ```
 
 | Variable | Format | Purpose |
 | --- | --- | --- |
 | `PORT` | TCP port, for example `3000` | Port used by the Node.js server. |
-| `DATA_DIR` | File-system path | Stores generated images, verification records, and response tokens. Relative paths are resolved from the project directory. |
+| `DATA_DIR` | File-system path | Stores generated images, generated audio, verification records, and response tokens. Relative paths are resolved from the project directory. |
 | `SITE_ORIGIN` | Comma-separated exact origins | Websites allowed to embed the widget. Include the scheme and optional port, but no path. Example: `https://abc.com,http://localhost:5173`. Wildcards are not accepted. |
 | `HOST_ORIGIN` | Comma-separated exact origins | Public origins from which this service is hosted. Example: `https://captcha.abc.com,http://localhost:3000`. Loopback hosts remain available for local backend calls and health checks. |
 | `CPU_RESOURCE_LIMIT` | Millicores, for example `250m` | Controls the renderer duty cycle. `1000m` represents one vCPU. This is an application-level throttle; use your container or operating system for a hard CPU quota. |
@@ -148,6 +148,7 @@ The paths and JSON formats match the hosted service. Only the hostname changes.
 | `GET` | `/widget` | Browser loader |
 | `POST` | `/api/verifications` | Widget |
 | `GET` | `/api/media/:mediaTicket` | Widget; one-time image delivery |
+| `GET` | `/api/audio/:audioTicket` | Widget; one-time audio delivery |
 | `GET` | `/api/verifications/:verificationId/status` | Widget |
 | `POST` | `/api/verifications/:verificationId/answer` | Widget |
 | `POST` | `/api/siteverify` | Your backend |
@@ -160,6 +161,7 @@ Unknown `/api/*` paths return JSON with HTTP 404. Other unknown paths return a s
 
 ```text
 data/
+├── audio/           # Shared pre-generated MP3 files
 ├── images/          # Shared pre-generated PNG files
 ├── verification/    # Active verification JSON records
 └── tokens/          # One-time response-token JSON records
