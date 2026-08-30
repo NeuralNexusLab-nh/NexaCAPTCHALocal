@@ -45,7 +45,7 @@ DATA_DIR=./data
 SITE_ORIGIN=https://abc.com,https://abc.com.tw
 HOST_ORIGIN=https://abcnexacaptcha.com,https://abcnexacaptcha.com.tw
 CPU_RESOURCE_LIMIT=250m
-RAM_RESOURCE_LIMIT_MB=300
+RAM_RESOURCE_LIMIT_MB=110
 STORAGE_RESOURCE_LIMIT_GB=10
 ```
 
@@ -161,7 +161,7 @@ Unknown `/api/*` paths return JSON with HTTP 404. Other unknown paths return a s
 
 ```text
 data/
-├── audio/           # Shared pre-generated MP3 files
+├── audio/           # Shared pre-generated WAV files
 ├── images/          # Shared pre-generated PNG files
 ├── verification/    # Active verification JSON records
 └── tokens/          # One-time response-token JSON records

@@ -59,7 +59,7 @@ app.get("/api/media/:mediaTicket", async (request, response, next) => {
 app.get("/api/audio/:audioTicket", async (request, response, next) => {
   try {
     const audio = await store.claimAudio(request.params.audioTicket || "");
-    response.set({ "Cache-Control": "no-store, max-age=0", "Content-Type": "audio/mpeg", "Cross-Origin-Resource-Policy": "same-origin" });
+    response.set({ "Cache-Control": "no-store, max-age=0", "Content-Type": "audio/wav", "Cross-Origin-Resource-Policy": "same-origin" });
     response.sendFile(audio.audioPath, (error) => { audio.release(); if (error) next(error); });
   } catch (error) { next(error); }
 });
